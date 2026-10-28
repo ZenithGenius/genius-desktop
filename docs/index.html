@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>genius-desktop</title>
+<meta name="description" content="A cold, dark Linux desktop and terminal, in one command. Debian, Ubuntu and Kali.">
+<meta property="og:title" content="genius-desktop">
+<meta property="og:description" content="A cold, dark Linux desktop and terminal, in one command.">
+<meta property="og:image" content="https://zenithgenius.github.io/genius-desktop/media/social.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0f13; --panel: #11181f; --panel2: #1c2731; --line: #243241;
+    --text: #c9d4de; --steel: #8fa6bd; --cyan: #6fe3e8; --blue: #6caaff; --violet: #b07cff; --dim: #4d5d6d;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.65 "JetBrains Mono", ui-monospace, monospace; }
+  body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 10;
+    background: repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 3px); }
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  nav { position: sticky; top: 0; z-index: 5; background: rgba(11,15,19,.92); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+  nav .in { max-width: 1060px; margin: auto; padding: 12px 16px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+  nav b { color: var(--violet); margin-right: auto; }
+  nav a { color: var(--steel); font-size: 13px; }
+  main { max-width: 1060px; margin: auto; padding: 0 16px 80px; }
+  header { padding: 64px 0 24px; text-align: center; }
+  header img { width: 100%; border-radius: 12px; border: 1px solid var(--line); }
+  h1 { font-size: clamp(30px, 6vw, 54px); margin: 28px 0 6px; letter-spacing: -1px;
+    background: linear-gradient(90deg, var(--cyan), var(--blue), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .tag { color: var(--steel); margin: 0 0 28px; }
+  .cta { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .btn { padding: 10px 18px; border-radius: 8px; border: 1px solid var(--line); color: var(--text); background: var(--panel2); }
+  .btn.main { background: var(--cyan); color: var(--bg); border-color: var(--cyan); font-weight: 600; }
+  h2 { font-size: 22px; margin: 72px 0 8px; color: var(--text); }
+  h2 span { color: var(--cyan); }
+  .lead { color: var(--steel); margin-top: 0; }
+  pre { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; overflow-x: auto; }
+  pre code { color: var(--text); }
+  .c { color: var(--dim); }
+  .copy { position: absolute; top: 10px; right: 10px; font: 12px inherit; font-family: inherit; color: var(--steel);
+    background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+  .copy:hover { color: var(--cyan); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .card h3 { margin: 0 0 6px; font-size: 16px; }
+  .card p { margin: 0; color: var(--steel); font-size: 13.5px; }
+  .card .k { font-size: 12px; color: var(--violet); text-transform: uppercase; letter-spacing: 1px; }
+  figure { margin: 22px 0; }
+  figure img { width: 100%; border-radius: 12px; border: 1px solid var(--line); display: block; }
+  figcaption { color: var(--dim); font-size: 12.5px; margin-top: 8px; text-align: center; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--violet); font-weight: 600; }
+  td:first-child { color: var(--cyan); white-space: nowrap; }
+  kbd { background: var(--panel2); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 1px 6px; font-family: inherit; font-size: 12.5px; }
+  .steps { counter-reset: s; list-style: none; padding: 0; }
+  .steps li { counter-increment: s; position: relative; padding: 0 0 18px 46px; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%;
+    display: grid; place-items: center; background: var(--panel2); color: var(--cyan); border: 1px solid var(--line); }
+  details { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; margin: 10px 0; }
+  summary { cursor: pointer; color: var(--text); }
+  details p { color: var(--steel); margin: 10px 0 2px; }
+  footer { border-top: 1px solid var(--line); color: var(--dim); font-size: 12.5px; text-align: center; padding: 28px 16px; }
+  @media (max-width: 700px) { .two { grid-template-columns: 1fr; } td:first-child { white-space: normal; } nav a.opt { display: none; } }
+</style>
+</head>
+<body>
+<nav><div class="in">
+  <b>#genius-desktop</b>
+  <a href="#install">Install</a>
+  <a href="#terminal">Terminal</a>
+  <a class="opt" href="#workspaces">Workspaces</a>
+  <a href="#desktop">Desktop</a>
+  <a class="opt" href="#boot">Boot</a>
+  <a class="opt" href="#undo">Undo</a>
+  <a href="https://github.com/ZenithGenius/genius-desktop">GitHub</a>
+</div></nav>
+
+<main>
+<header>
+  <img src="media/hero.gif" alt="genius-desktop">
+  <h1>genius-desktop</h1>
+  <p class="tag">A cold, dark Linux desktop and terminal, in one command.<br>Steel, cyan, blue and violet. Fast animations. No clutter.</p>
+  <div class="cta">
+    <a class="btn main" href="#install">Install</a>
+    <a class="btn" href="https://github.com/ZenithGenius/genius-desktop">View on GitHub</a>
+  </div>
+</header>
+
+<h2 id="install"><span>01</span> Install</h2>
+<p class="lead">Debian, Ubuntu or Kali. Run it as your normal user; it asks for sudo when it needs it.</p>
+<pre><button class="copy">copy</button><code>git clone https://github.com/ZenithGenius/genius-desktop.git
+cd genius-desktop
+./install.sh --dry-run   <span class="c"># preview every change, touch nothing</span>
+./install.sh             <span class="c"># terminal + desktop</span>
+./install.sh --boot      <span class="c"># optional: boot splash, GRUB, login screen</span></code></pre>
+<ol class="steps">
+  <li>Packages your release does not have are skipped and listed; starship and yazi fall back to their official binaries.</li>
+  <li>Configs are copied into your home folder. Any file that differs is kept as <code>NAME.bak-genius-DATE</code>.</li>
+  <li>One line is added to <code>~/.zshrc</code>. Open a new terminal and type <code>cheat</code>.</li>
+  <li>On GNOME, extensions switch on at your next login.</li>
+</ol>
+
+<div class="grid">
+  <div class="card"><div class="k">Layer 1</div><h3>Terminal</h3><p>Prompt, banner, modern CLI tools, themed tmux with workspaces and lock screens. Works on servers too.</p></div>
+  <div class="card"><div class="k">Layer 2</div><h3>Desktop</h3><p>Dark GNOME with cyan icons, Desktop Cube, Coverflow, Burn My Windows, Conky HUD, quiet sounds.</p></div>
+  <div class="card"><div class="k">Layer 3 &middot; opt-in</div><h3>Boot</h3><p>Animated Plymouth splash, GRUB menu theme and login wallpaper, system-wide with <code>--boot</code>.</p></div>
+</div>
+
+<h2 id="terminal"><span>02</span> Terminal</h2>
+<p class="lead">Every tool shares the same palette, and every block in the shell file checks for its tool first, so a missing package never breaks your shell.</p>
+<figure><img src="media/terminal.gif" alt="Banner, fastfetch, prompt, eza, bat and tldr" loading="lazy"><figcaption>banner, fastfetch, starship prompt, eza, bat, tldr</figcaption></figure>
+<table>
+  <tr><th>Command</th><th>What it does</th></tr>
+  <tr><td>ls ll la lt</td><td>eza listings: git status, relative dates, tree view</td></tr>
+  <tr><td>cat file</td><td>bat with syntax highlighting; plain text in pipes</td></tr>
+  <tr><td><kbd>Ctrl</kbd>+<kbd>R</kbd> <kbd>Ctrl</kbd>+<kbd>T</kbd> <kbd>Alt</kbd>+<kbd>C</kbd></td><td>fzf history search, file picker, jump into a subfolder</td></tr>
+  <tr><td>z proj / zi</td><td>zoxide: jump to a folder you use often</td></tr>
+  <tr><td>y</td><td>yazi file manager; quit into the folder you browsed to</td></tr>
+  <tr><td>lazygit</td><td>git dashboard</td></tr>
+  <tr><td>glow file.md</td><td>Markdown in the terminal</td></tr>
+  <tr><td>btop</td><td>system monitor, matching theme</td></tr>
+  <tr><td>tldr cmd</td><td>short practical examples</td></tr>
+  <tr><td>asciinema rec</td><td>record a terminal session, idle gaps trimmed</td></tr>
+  <tr><td>cava / cava-idle</td><td>music visualizer; the idle version needs no audio</td></tr>
+  <tr><td>cheat</td><td>the full cheat sheet</td></tr>
+</table>
+<p class="lead">Commands that run 30 seconds or more send a desktop notification when they end. A <code>● vpn</code> tag shows in the prompt while a VPN tunnel is up.</p>
+
+<h2 id="workspaces"><span>03</span> Workspaces and lock screens</h2>
+<p class="lead"><code>mission</code> builds a tmux workspace: a main shell, btop beside it, and a Markdown notes window. It remembers its folder, so it comes back after a reboot.</p>
+<pre><button class="copy">copy</button><code>mission                 <span class="c"># pick: running missions first, then saved ones</span>
+mission recon ~/lab     <span class="c"># create or resume "recon" in ~/lab</span>
+lockscreen radar        <span class="c"># preview a lock screen: matrix pipes starfield radar hex clock</span></code></pre>
+<figure><img src="media/lockscreens.gif" alt="Six lock screen animations" loading="lazy"><figcaption>after 5 idle minutes tmux locks with one of six animations; any key returns</figcaption></figure>
+<table>
+  <tr><th>Keys</th><th>Does</th></tr>
+  <tr><td><kbd>Ctrl</kbd>+<kbd>B</kbd> then <kbd>|</kbd></td><td>split side by side</td></tr>
+  <tr><td><kbd>Ctrl</kbd>+<kbd>B</kbd> then <kbd>-</kbd></td><td>split top and bottom</td></tr>
+  <tr><td><kbd>Ctrl</kbd>+<kbd>B</kbd> then arrows</td><td>move between panes, or click</td></tr>
+  <tr><td><kbd>Ctrl</kbd>+<kbd>B</kbd> then <kbd>d</kbd></td><td>detach; everything keeps running</td></tr>
+</table>
+
+<h2 id="desktop"><span>04</span> Desktop</h2>
+<p class="lead">Installed only when GNOME is present. Extensions are fetched from extensions.gnome.org for your exact GNOME version.</p>
+<div class="grid">
+  <div class="card"><div class="k">Look</div><h3>Dark, slate, cyan</h3><p>Dark mode, Papirus icons with cyan folders, Bibata cursor, the system font kept as is.</p></div>
+  <div class="card"><div class="k">Motion</div><h3>Burn My Windows</h3><p>Quick effects when a window opens (Hexagon, Glitch, TV), dramatic ones when it closes (Matrix, Fire, Broken glass).</p></div>
+  <div class="card"><div class="k">Switching</div><h3>Cube and Coverflow</h3><p>Desktop Cube on <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+arrows with a nebula sky box; a 3D carousel on <kbd>Alt</kbd>+<kbd>Tab</kbd>.</p></div>
+  <div class="card"><div class="k">Info</div><h3>Conky HUD and Vitals</h3><p>CPU, temperature, RAM and network on the desktop; load and memory in the top bar.</p></div>
+  <div class="card"><div class="k">Sound</div><h3>Anonymous sound theme</h3><p>Short cold blips for alerts. No login sound.</p></div>
+</div>
+
+<h2 id="boot"><span>05</span> Boot and login</h2>
+<p class="lead"><code>./install.sh --boot</code> backs up <code>/etc/default/grub</code>, installs the splash, sets the GRUB theme and, on GDM systems, the login wallpaper.</p>
+<figure><img src="media/boot-splash.gif" alt="Animated boot splash" loading="lazy"><figcaption>Plymouth splash: intro, seamless loop, scanning reticle</figcaption></figure>
+<div class="two">
+  <figure><img src="media/grub.png" alt="GRUB menu" loading="lazy"><figcaption>GRUB menu</figcaption></figure>
+  <figure><img src="media/login.jpg" alt="Login wallpaper" loading="lazy"><figcaption>login screen</figcaption></figure>
+</div>
+
+<h2 id="customize"><span>06</span> Customize</h2>
+<table>
+  <tr><th>Setting</th><th>Effect</th></tr>
+  <tr><td>GENIUS_BANNER="#hacker"</td><td>startup banner text (default #yourname)</td></tr>
+  <tr><td>GENIUS_QUIET=1</td><td>no banner or fastfetch when a terminal opens</td></tr>
+  <tr><td>~/.config/starship.toml</td><td>prompt</td></tr>
+  <tr><td>~/.tmux.conf</td><td>tmux theme, keys, lock timer</td></tr>
+  <tr><td>~/.config/burn-my-windows/</td><td>window open and close effects</td></tr>
+</table>
+<figure><img src="media/palette.svg" alt="Palette" loading="lazy"></figure>
+
+<h2 id="undo"><span>07</span> Undo and troubleshooting</h2>
+<details><summary>Remove the terminal layer</summary><p>Delete the genius-desktop line at the end of ~/.zshrc, then restore any replaced file from its .bak-genius-DATE copy.</p></details>
+<details><summary>Remove the desktop layer</summary><p>Switch icons, cursor and sounds back in Settings and turn the extensions off in the Extensions app.</p></details>
+<details><summary>Remove the boot layer</summary><p>Restore /etc/default/grub from its backup and run sudo update-grub, then sudo plymouth-set-default-theme -R bgrt. For the login screen, run sudo ./uninstall.sh from a clone of gse-gdm-extension.</p></details>
+<details><summary>The prompt did not change</summary><p>Open a new terminal or run exec zsh. The login shell switch to zsh applies at the next login.</p></details>
+<details><summary>Extensions are installed but not running</summary><p>GNOME loads new extensions at login. Log out and back in, then check with gnome-extensions list --enabled.</p></details>
+<details><summary>Installing over SSH</summary><p>Supported. The installer borrows the logged-in session bus for GNOME settings, or starts a private one.</p></details>
+</main>
+
+<footer>
+  MIT licensed scripts and configs. Third-party assets keep their own licenses, listed in the
+  <a href="https://github.com/ZenithGenius/genius-desktop#credits">README</a>.<br>
+  <span style="color:var(--violet)">Expect us.</span>
+</footer>
+
+<script>
+  document.querySelectorAll('.copy').forEach(b => b.addEventListener('click', () => {
+    const t = b.parentElement.querySelector('code').innerText.replace(/\s+#.*$/gm, '');
+    navigator.clipboard.writeText(t).then(() => { b.textContent = 'copied'; setTimeout(() => b.textContent = 'copy', 1500); });
+  }));
+</script>
+</body>
+</html>

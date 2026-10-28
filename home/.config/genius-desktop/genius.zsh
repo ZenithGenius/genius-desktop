@@ -37,10 +37,11 @@ if command -v fzf >/dev/null; then
 --color=bg+:#1c2731,bg:-1,spinner:#6fe3e8,hl:#b07cff,fg:#c9d4de,header:#6caaff,info:#4d5d6d \
 --color=pointer:#6fe3e8,marker:#b07cff,fg+:#e6edf3,prompt:#6fe3e8,hl+:#b07cff,border:#3a4652"
   # fzf >= 0.48 has --zsh; older Debian packages ship the scripts instead
-  source <(fzf --zsh 2>/dev/null) 2>/dev/null || {
+  if fzf --zsh >/dev/null 2>&1; then source <(fzf --zsh)
+  else
     [[ -r /usr/share/doc/fzf/examples/key-bindings.zsh ]] && source /usr/share/doc/fzf/examples/key-bindings.zsh
     [[ -r /usr/share/doc/fzf/examples/completion.zsh ]] && source /usr/share/doc/fzf/examples/completion.zsh
-  }
+  fi
 fi
 
 # bat (Debian names it batcat): syntax-highlighted cat, plain in pipes

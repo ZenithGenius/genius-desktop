@@ -5,6 +5,8 @@
 #   mission name dir   start it in a given folder (a running mission keeps its panes; the folder applies next rebuild)
 # The folder is stored in the mission's notes file, so missions survive reboots.
 N="$HOME/notes"
+# rewrite the "Folder:" line without passing the path through sed
+set_folder() { D="$1" awk '/^Folder: `.*`$/ { print "Folder: `" ENVIRON["D"] "`"; next } { print }' "$notes" > "$notes.tmp" && mv "$notes.tmp" "$notes"; }
 
 if [ -z "$1" ]; then
   running=$(tmux ls -F '#{session_name}' 2>/dev/null | sed -n 's/^mission-//p')
@@ -17,12 +19,13 @@ if [ -z "$1" ]; then
 fi
 
 name=$1
+case $name in *[!A-Za-z0-9._-]*|.*) echo "mission: use letters, digits, '.', '_' or '-' in the name" >&2; exit 1 ;; esac
 session="mission-$name"
 notes="$N/$name.md"
 
 if tmux has-session -t "$session" 2>/dev/null; then
   # never rebuild a running mission; a new folder is saved for the next rebuild
-  [ -n "$2" ] && [ -f "$notes" ] && sed -i "s|^Folder: \`.*\`\$|Folder: \`$(realpath "$2")\`|" "$notes"
+  [ -n "$2" ] && [ -f "$notes" ] && set_folder "$(realpath "$2")"
   [ -n "$TMUX" ] && exec tmux switch-client -t "$session"
   exec tmux attach -t "$session"
 fi
@@ -41,7 +44,7 @@ fi
 
 mkdir -p "$N"
 if [ -f "$notes" ]; then
-  sed -i "s|^Folder: \`.*\`\$|Folder: \`$dir\`|" "$notes"
+  set_folder "$dir"
 else
   printf '# Mission: %s\n\nFolder: `%s`\n\n## Goals\n\n- \n\n## Notes\n\n' "$name" "$dir" > "$notes"
 fi

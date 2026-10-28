@@ -46,6 +46,11 @@ for f in glob.glob(f"{HOME}/.claude/projects/*/*.jsonl"):
         continue
     rows.append((os.path.getmtime(f), "claude", cwd, os.path.basename(f)[:-6], summary or title or "(untitled)"))
 
+def clean(s):
+    # tabs, newlines and escape sequences in titles/paths would break the TSV and the terminal
+    return "".join(c if c.isprintable() else " " for c in str(s))
+
+rows = [(t, tool, cwd, cid, clean(title)) for t, tool, cwd, cid, title in rows if clean(cwd) == cwd]
 rows.sort(reverse=True)
 for t, tool, cwd, cid, title in rows:
     short = cwd.replace(HOME, "~")

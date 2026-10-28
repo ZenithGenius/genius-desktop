@@ -1,12 +1,14 @@
 #!/bin/sh
 # cava without music: a silent generator of drifting tones + pink noise feeds cava through a pipe.
-F=/tmp/cava-idle.fifo
-[ -p "$F" ] || mkfifo "$F"
+D=$(mktemp -d)                       # private dir: no predictable FIFO in /tmp
+F=$D/fifo
+mkfifo "$F"
+sed "s|^source = .*|source = $F|" "$HOME/.config/cava/config-idle" > "$D/config"
 ffmpeg -v quiet -re \
   -f lavfi -i "aevalsrc='0.30*sin(2*PI*70*t)*(0.5+0.5*sin(2*PI*0.23*t)) + 0.22*sin(2*PI*180*t)*(0.5+0.5*sin(2*PI*0.37*t+1)) + 0.16*sin(2*PI*520*t)*(0.5+0.5*sin(2*PI*0.51*t+2)) + 0.12*sin(2*PI*1300*t)*(0.5+0.5*sin(2*PI*0.29*t+3)) + 0.08*sin(2*PI*3400*t)*(0.5+0.5*sin(2*PI*0.61*t+4)) + 0.05*sin(2*PI*7800*t)*(0.5+0.5*sin(2*PI*0.43*t+5))':s=44100" \
   -f lavfi -i "anoisesrc=c=pink:r=44100:a=0.25" \
   -filter_complex "[1]volume='0.25+0.2*sin(2*PI*0.17*t)':eval=frame[n];[0][n]amix=inputs=2:normalize=0,pan=stereo|c0=c0|c1=c0" \
   -f s16le -ar 44100 -ac 2 - > "$F" &
 gen=$!
-trap 'kill $gen 2>/dev/null' EXIT INT TERM
-cava -p "$HOME/.config/cava/config-idle"
+trap 'kill $gen 2>/dev/null; rm -rf "$D"' EXIT INT TERM
+cava -p "$D/config"
