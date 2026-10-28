@@ -31,7 +31,11 @@
   header img { width: 100%; border-radius: 12px; border: 1px solid var(--line); }
   h1 { font-size: clamp(30px, 6vw, 54px); margin: 28px 0 6px; letter-spacing: -1px;
     background: linear-gradient(90deg, var(--cyan), var(--blue), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .tag { color: var(--steel); margin: 0 0 28px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 28px 0; text-align: left; }
+  .stats div { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .stats b { display: block; font-size: 30px; line-height: 1.1; background: linear-gradient(90deg, var(--cyan), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .stats span { color: var(--steel); font-size: 13px; }
   .cta { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
   .btn { padding: 10px 18px; border-radius: 8px; border: 1px solid var(--line); color: var(--text); background: var(--panel2); }
   .btn.main { background: var(--cyan); color: var(--bg); border-color: var(--cyan); font-weight: 600; }
@@ -52,6 +56,8 @@
   figure { margin: 22px 0; }
   figure img { width: 100%; border-radius: 12px; border: 1px solid var(--line); display: block; }
   figcaption { color: var(--dim); font-size: 12.5px; margin-top: 8px; text-align: center; }
+  .demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .demo figure { margin: 0; }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
   th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
@@ -84,8 +90,13 @@
 <main>
 <header>
   <img src="media/hero.gif" alt="genius-desktop">
-  <h1>genius-desktop</h1>
-  <p class="tag">A cold, dark Linux desktop and terminal, in one command.<br>Steel, cyan, blue and violet. Fast animations. No clutter.</p>
+  <h1 class="sr">genius-desktop</h1>
+  <div class="stats">
+    <div><b>3</b><span>layers: terminal, desktop, boot</span></div>
+    <div><b>20+</b><span>tools themed in one palette</span></div>
+    <div><b>2</b><span>distros tested: Ubuntu 26.04, Kali 2026.3</span></div>
+    <div><b>0</b><span>surprises: <code>--dry-run</code> shows every change</span></div>
+  </div>
   <div class="cta">
     <a class="btn main" href="#install">Install</a>
     <a class="btn" href="https://github.com/ZenithGenius/genius-desktop">View on GitHub</a>
@@ -148,6 +159,15 @@ lockscreen radar        <span class="c"># preview a lock screen: matrix pipes st
 
 <h2 id="desktop"><span>04</span> Desktop</h2>
 <p class="lead">Installed only when GNOME is present. Extensions are fetched from extensions.gnome.org for your exact GNOME version.</p>
+<div class="demo">
+  <figure><img src="https://raw.githubusercontent.com/Schneegans/Desktop-Cube/main/docs/pics/feature02.gif" alt="Desktop Cube" loading="lazy"><figcaption>Desktop Cube</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/Schneegans/Burn-My-Windows/main/docs/pics/hexagon.gif" alt="Hexagon effect" loading="lazy"><figcaption>Burn My Windows: Hexagon (open)</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/Schneegans/Burn-My-Windows/main/docs/pics/matrix.gif" alt="Matrix effect" loading="lazy"><figcaption>Burn My Windows: Matrix (close)</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/Schneegans/Burn-My-Windows/main/docs/pics/fire.gif" alt="Fire effect" loading="lazy"><figcaption>Burn My Windows: Fire (close)</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/Schneegans/Burn-My-Windows/main/docs/pics/broken-glass.gif" alt="Broken glass effect" loading="lazy"><figcaption>Burn My Windows: Broken glass (close)</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/dsheeler/CoverflowAltTab/main/img/screenshot.png" alt="Coverflow Alt-Tab" loading="lazy"><figcaption>Coverflow Alt-Tab</figcaption></figure>
+</div>
+<p class="lead" style="font-size:12.5px">Demo clips from the extensions' own repositories, by Simon Schneegans (Desktop Cube, Burn My Windows) and dsheeler (Coverflow Alt-Tab), GPL-3.0. They show the authors' default look; genius-desktop runs the same effects on the dark palette.</p>
 <div class="grid">
   <div class="card"><div class="k">Look</div><h3>Dark, slate, cyan</h3><p>Dark mode, Papirus icons with cyan folders, Bibata cursor, the system font kept as is.</p></div>
   <div class="card"><div class="k">Motion</div><h3>Burn My Windows</h3><p>Quick effects when a window opens (Hexagon, Glitch, TV), dramatic ones when it closes (Matrix, Fire, Broken glass).</p></div>

@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-  <b>A cold, dark Linux desktop and terminal, in one command.</b><br>
-  Steel, cyan, blue and violet. Fast animations. No clutter.
+  <code>git clone https://github.com/ZenithGenius/genius-desktop.git && ./genius-desktop/install.sh</code><br>
+  <sub>3 layers · 20+ themed tools · tested on Ubuntu 26.04 and Kali 2026.3 · every change previewable with <code>--dry-run</code></sub>
 </p>
 
 <p align="center">
@@ -110,6 +110,21 @@ After 5 idle minutes tmux locks with one of six animations. Any key returns. Pre
 ## Desktop
 
 Installed only when GNOME is present. Extensions come from extensions.gnome.org for your exact GNOME version and switch on at the next login.
+
+<table>
+<tr>
+<td align="center" width="33%"><img src="https://raw.githubusercontent.com/Schneegans/Desktop-Cube/main/docs/pics/feature02.gif" alt="Desktop Cube"><br><sub>Desktop Cube</sub></td>
+<td align="center" width="33%"><img src="https://raw.githubusercontent.com/Schneegans/Burn-My-Windows/main/docs/pics/hexagon.gif" alt="Burn My Windows, Hexagon"><br><sub>Burn My Windows: Hexagon (open)</sub></td>
+<td align="center" width="33%"><img src="https://raw.githubusercontent.com/Schneegans/Burn-My-Windows/main/docs/pics/matrix.gif" alt="Burn My Windows, Matrix"><br><sub>Burn My Windows: Matrix (close)</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="https://raw.githubusercontent.com/Schneegans/Burn-My-Windows/main/docs/pics/fire.gif" alt="Burn My Windows, Fire"><br><sub>Burn My Windows: Fire (close)</sub></td>
+<td align="center"><img src="https://raw.githubusercontent.com/Schneegans/Burn-My-Windows/main/docs/pics/broken-glass.gif" alt="Burn My Windows, Broken glass"><br><sub>Burn My Windows: Broken glass (close)</sub></td>
+<td align="center"><img src="https://raw.githubusercontent.com/dsheeler/CoverflowAltTab/main/img/screenshot.png" alt="Coverflow Alt-Tab"><br><sub>Coverflow Alt-Tab</sub></td>
+</tr>
+</table>
+
+<sub>Demo clips come from the extensions' own repositories, shown here by link: Desktop Cube and Burn My Windows by Simon Schneegans, Coverflow Alt-Tab by dsheeler and contributors (all GPL-3.0). They use the authors' default themes; with genius-desktop the same effects run on the dark palette.</sub>
 
 | Piece | Details |
 |---|---|
