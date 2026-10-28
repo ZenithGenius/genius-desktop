@@ -134,7 +134,7 @@ Installed only when GNOME is present. Extensions come from extensions.gnome.org 
 <p align="center"><img src="docs/media/boot-splash.gif" alt="Animated boot splash" width="80%"></p>
 
 <p align="center">
-  <img src="docs/media/grub.png" alt="GRUB menu" width="49%">
+  <img src="docs/media/grub.jpg" alt="GRUB menu" width="49%">
   <img src="docs/media/login.jpg" alt="Login wallpaper" width="49%">
 </p>
 
