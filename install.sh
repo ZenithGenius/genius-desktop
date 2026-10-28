@@ -64,13 +64,13 @@ apt_install zsh tmux git curl unzip python3 fzf bat eza zoxide fastfetch figlet 
 if [[ $MISSING == *" starship "* ]] && ! command -v starship >/dev/null; then
   say "starship is not packaged here: installing the official release into ~/.local/bin"
   run mkdir -p "$HOME/.local/bin"
-  ((DRY)) || curl -fsSL https://starship.rs/install.sh | sh -s -- -y -b "$HOME/.local/bin" >/dev/null
+  ((DRY)) || curl -fsSL --retry 3 --retry-delay 2 https://starship.rs/install.sh | sh -s -- -y -b "$HOME/.local/bin" >/dev/null
 fi
 if [[ $MISSING == *" yazi "* ]] && ! command -v yazi >/dev/null; then
   say "yazi is not packaged here: installing the official release into ~/.local/bin"
   if ((DRY)); then echo "    [dry-run] download yazi-$(uname -m)-unknown-linux-gnu.zip"; else
     tmp=$(mktemp -d)
-    curl -fsSL "https://github.com/sxyazi/yazi/releases/latest/download/yazi-$(uname -m)-unknown-linux-gnu.zip" -o "$tmp/y.zip" \
+    curl -fsSL --retry 3 --retry-delay 2 "https://github.com/sxyazi/yazi/releases/latest/download/yazi-$(uname -m)-unknown-linux-gnu.zip" -o "$tmp/y.zip" \
       && unzip -q "$tmp/y.zip" -d "$tmp" && mkdir -p "$HOME/.local/bin" && cp "$tmp"/yazi-*/{yazi,ya} "$HOME/.local/bin/" \
       || warn "yazi download failed, skipped"
     rm -rf "$tmp"
@@ -124,14 +124,14 @@ if ((DESKTOP)); then
   say "GNOME extensions (active after your next login)"
   exts=(Vitals@CoreCoding.com desktop-cube@schneegans.github.com CoverflowAltTab@palatis.blogspot.com burn-my-windows@schneegans.github.com)
   for u in "${exts[@]}"; do
-    url=$(curl -fsS "https://extensions.gnome.org/extension-info/?uuid=$u&shell_version=$shell_major" 2>/dev/null \
+    url=$(curl -fsS --retry 3 --retry-delay 2 "https://extensions.gnome.org/extension-info/?uuid=$u&shell_version=$shell_major" 2>/dev/null \
       | python3 -c 'import json,sys; print(json.load(sys.stdin)["download_url"])' 2>/dev/null) \
       || { warn "$u has no release for GNOME $shell_major yet, skipped"; continue; }
     dst=$HOME/.local/share/gnome-shell/extensions/$u
-    ver=$(curl -fsS "https://extensions.gnome.org/extension-info/?uuid=$u&shell_version=$shell_major" | python3 -c 'import json,sys; print(json.load(sys.stdin)["version"])' 2>/dev/null || true)
+    ver=$(curl -fsS --retry 3 --retry-delay 2 "https://extensions.gnome.org/extension-info/?uuid=$u&shell_version=$shell_major" | python3 -c 'import json,sys; print(json.load(sys.stdin)["version"])' 2>/dev/null || true)
     if [[ -n $ver ]] && grep -qE "\"version\": *$ver\b" "$dst/metadata.json" 2>/dev/null; then echo "    $u is up to date"; continue; fi
     if ((DRY)); then echo "    [dry-run] download $u into $dst"; continue; fi
-    tmp=$(mktemp --suffix=.zip); curl -fsSL "https://extensions.gnome.org$url" -o "$tmp"
+    tmp=$(mktemp --suffix=.zip); curl -fsSL --retry 3 --retry-delay 2 "https://extensions.gnome.org$url" -o "$tmp"
     rm -rf "$dst"; mkdir -p "$dst"; unzip -oq "$tmp" -d "$dst"; rm -f "$tmp"
     [[ -d $dst/schemas ]] && glib-compile-schemas "$dst/schemas"
     python3 - "$u" <<'EOF'

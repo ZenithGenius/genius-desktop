@@ -202,7 +202,7 @@ It works. GNOME settings need a session bus, so the installer borrows the logged
 | System | Terminal | Desktop | Boot |
 |---|---|---|---|
 | Ubuntu 26.04, GNOME 50 | ✓ | ✓ | ✓ |
-| Kali 2026.3, GNOME 50 | ✓ | ✓ | splash and GRUB ✓, login wallpaper ✗ (see below) |
+| Kali 2026.3, GNOME 50 (2 VMs) | ✓ | ✓ | splash and GRUB ✓, login wallpaper ✗ (see below) |
 
 ## Credits
 
