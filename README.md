@@ -163,7 +163,7 @@ Edit the copy in the repo instead and run `./install.sh` again to redeploy.
 
 - **Terminal**: delete the `genius-desktop` line at the end of `~/.zshrc`. Restore any replaced file from its `.bak-genius-DATE` copy.
 - **Desktop**: switch icons, cursor and sounds back in Settings, and turn extensions off in the Extensions app.
-- **Boot**: restore `/etc/default/grub` from its backup, run `sudo update-grub`, then `sudo plymouth-set-default-theme -R bgrt` (or your previous theme). For the login screen, run `sudo ./uninstall.sh` from a clone of gse-gdm-extension.
+- **Boot**: delete `/etc/default/grub.d/99-genius.cfg`, restore `/etc/default/grub` from its backup, run `sudo update-grub`, then `sudo plymouth-set-default-theme -R bgrt` (or your previous theme). For the login screen, run `sudo ./uninstall.sh` from a clone of gse-gdm-extension.
 
 ## Troubleshooting
 
