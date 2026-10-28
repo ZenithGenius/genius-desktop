@@ -35,10 +35,13 @@ run()  { if ((DRY)); then printf '    [dry-run] %s\n' "$*"; else "$@"; fi; }
 apt_install() {
   local ok=() p
   for p in "$@"; do
-    if [[ $(LC_ALL=C apt-cache policy "$p" 2>/dev/null) == *'Candidate: '[0-9]* ]]; then ok+=("$p"); else warn "not in your repos, skipped: $p"; fi
+    if [[ $(LC_ALL=C apt-cache policy "$p" 2>/dev/null) == *'Candidate: '[0-9]* ]]; then ok+=("$p"); else warn "not in your repos, skipped: $p"; MISSING+=" $p "; fi
   done
   ((${#ok[@]} == 0)) || run sudo apt-get install -y --no-install-recommends "${ok[@]}"
 }
+
+MISSING=""
+export PATH="$HOME/.local/bin:$PATH"   # so re-runs see the release binaries installed below
 
 # copy a tree into $HOME, keeping a backup of any file that differs
 deploy() {
@@ -58,12 +61,12 @@ run sudo apt-get update -qq
 apt_install zsh tmux git curl unzip python3 fzf bat eza zoxide fastfetch figlet glow btop cava cmatrix \
   pipes-sh yazi lazygit starship tealdeer asciinema ffmpeg xclip libnotify-bin \
   zsh-autosuggestions zsh-syntax-highlighting ghostty
-if ! command -v starship >/dev/null; then
+if [[ $MISSING == *" starship "* ]] && ! command -v starship >/dev/null; then
   say "starship is not packaged here: installing the official release into ~/.local/bin"
   run mkdir -p "$HOME/.local/bin"
   ((DRY)) || curl -fsSL https://starship.rs/install.sh | sh -s -- -y -b "$HOME/.local/bin" >/dev/null
 fi
-if ! command -v yazi >/dev/null; then
+if [[ $MISSING == *" yazi "* ]] && ! command -v yazi >/dev/null; then
   say "yazi is not packaged here: installing the official release into ~/.local/bin"
   if ((DRY)); then echo "    [dry-run] download yazi-$(uname -m)-unknown-linux-gnu.zip"; else
     tmp=$(mktemp -d)
@@ -125,6 +128,8 @@ if ((DESKTOP)); then
       | python3 -c 'import json,sys; print(json.load(sys.stdin)["download_url"])' 2>/dev/null) \
       || { warn "$u has no release for GNOME $shell_major yet, skipped"; continue; }
     dst=$HOME/.local/share/gnome-shell/extensions/$u
+    ver=$(curl -fsS "https://extensions.gnome.org/extension-info/?uuid=$u&shell_version=$shell_major" | python3 -c 'import json,sys; print(json.load(sys.stdin)["version"])' 2>/dev/null || true)
+    if [[ -n $ver ]] && grep -qE "\"version\": *$ver\b" "$dst/metadata.json" 2>/dev/null; then echo "    $u is up to date"; continue; fi
     if ((DRY)); then echo "    [dry-run] download $u into $dst"; continue; fi
     tmp=$(mktemp --suffix=.zip); curl -fsSL "https://extensions.gnome.org$url" -o "$tmp"
     rm -rf "$dst"; mkdir -p "$dst"; unzip -oq "$tmp" -d "$dst"; rm -f "$tmp"
