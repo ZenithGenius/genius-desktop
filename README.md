@@ -200,14 +200,14 @@ It works. GNOME settings need a session bus, so the installer borrows the logged
 
 ## Credits
 
-- [Papirus icon theme](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme) (GPL-3.0)
-- [Bibata cursor](https://github.com/ful1e5/Bibata_Cursor) (GPL-3.0)
-- [Desktop Cube](https://github.com/Schneegans/Desktop-Cube) and [Burn My Windows](https://github.com/Schneegans/Burn-My-Windows) by Simon Schneegans
-- [Coverflow Alt-Tab](https://github.com/dsheeler/CoverflowAltTab) and [Vitals](https://github.com/corecoding/Vitals)
-- [gse-gdm-extension](https://github.com/pratap-panabaka/gse-gdm-extension) by Pratap Panabaka (GPL-3.0)
-- Boot splash reticle: Cross HUD from [adi1090x/plymouth-themes](https://github.com/adi1090x/plymouth-themes) (GPL-3.0); the `system/plymouth` folder is GPL-3.0 as a result
-- Boot splash footage: [Mixkit](https://mixkit.co/) clip 50745 (Mixkit free license)
-- Mask artwork for GRUB and login: [Pixabay](https://pixabay.com/illustrations/hacker-attack-mask-binary-one-7759727/) image 7759727 (Pixabay content license)
-- [starship](https://starship.rs), [eza](https://github.com/eza-community/eza), [bat](https://github.com/sharkdp/bat), [fzf](https://github.com/junegunn/fzf), [zoxide](https://github.com/ajeetdsouza/zoxide), [yazi](https://github.com/sxyazi/yazi), [lazygit](https://github.com/jesseduffield/lazygit), [glow](https://github.com/charmbracelet/glow), [btop](https://github.com/aristocratos/btop), [cava](https://github.com/karlstav/cava), [fastfetch](https://github.com/fastfetch-cli/fastfetch), [tealdeer](https://github.com/tealdeer-rs/tealdeer), [asciinema](https://asciinema.org)
+Built on the work of others. Every third-party piece, with its author, source and license, is listed in [CREDITS.md](CREDITS.md).
 
-Scripts and configs are MIT. Third-party assets keep their own licenses, listed above.
+- Mask artwork: Gerd Altmann (geralt) on [Pixabay](https://pixabay.com/illustrations/hacker-attack-mask-binary-one-7759727/), Pixabay Content License
+- Boot splash footage: [Mixkit](https://mixkit.co/free-stock-video/long-haired-hacker-wearing-anonymous-face-mask-in-front-of-50745/) clip 50745, Mixkit Stock Video Free License
+- Boot splash reticle: Cross HUD by Aditya Shakya ([adi1090x/plymouth-themes](https://github.com/adi1090x/plymouth-themes)), GPL-3.0
+- GRUB font: Noto Sans Mono by the Noto Project Authors, SIL Open Font License 1.1
+- GNOME extensions: Simon Schneegans (Desktop Cube, Burn My Windows), dsheeler (Coverflow Alt-Tab), corecoding (Vitals), Pratap Panabaka (gse-gdm-extension)
+- Icons and cursor: Papirus Development Team, ful1e5 (Bibata)
+- Terminal tools: starship, eza, bat, fzf, zoxide, yazi, lazygit, glow, btop, cava, fastfetch, tealdeer, asciinema, cmatrix, pipes.sh, tmux and zsh, by their authors
+
+Scripts and configs are MIT. The `system/plymouth` folder is GPL-3.0 because it includes the Cross HUD frames. The GRUB fonts stay under the OFL.
