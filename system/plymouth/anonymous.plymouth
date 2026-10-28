@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Anonymous
+Description=We are Anonymous. We are Legion. We do not forgive. We do not forget. Expect us.
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/anonymous
+ScriptFile=/usr/share/plymouth/themes/anonymous/anonymous.script

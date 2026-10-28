@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Anonymous HUD (conky)
+Exec=sh -c 'sleep 8; conky -c "$HOME/.config/conky/anonymous.conf"'
+NoDisplay=true
+X-GNOME-Autostart-enabled=true

@@ -1,0 +1,25 @@
+# Anonymous palette overrides (rest inherits yazi's default dark theme)
+[mgr]
+cwd = { fg = "#6fe3e8", bold = true }
+border_style = { fg = "#3a4652" }
+marker_selected = { fg = "#b07cff", bg = "#b07cff" }
+
+[tabs]
+active = { fg = "#0b0f13", bg = "#6fe3e8", bold = true }
+inactive = { fg = "#8fa6bd", bg = "#1c2731" }
+
+[mode]
+normal_main = { fg = "#0b0f13", bg = "#6caaff", bold = true }
+normal_alt = { fg = "#6caaff", bg = "#1c2731" }
+select_main = { fg = "#0b0f13", bg = "#b07cff", bold = true }
+select_alt = { fg = "#b07cff", bg = "#1c2731" }
+
+[filetype]
+rules = [
+  { mime = "inode/directory", fg = "#6caaff", bold = true },
+  { mime = "image/*", fg = "#8fd0d4" },
+  { mime = "{audio,video}/*", fg = "#a79bd0" },
+  { mime = "application/{zip,gzip,x-tar,x-7z-compressed,x-xz,x-rar,vnd.debian.binary-package}", fg = "#b07cff" },
+  { mime = "application/pdf", fg = "#8c8cff" },
+  { url = "*", fg = "#c9d4de" },
+]

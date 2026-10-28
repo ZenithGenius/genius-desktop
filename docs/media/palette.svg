@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="96" viewBox="0 0 880 96" font-family="ui-monospace,monospace" font-size="12">
+<rect width="100%" height="100%" rx="10" fill="#0b0f13"/>
+<rect x="10" y="10" width="90" height="46" rx="6" fill="#0b0f13" stroke="#3a4652"/>
+<text x="10" y="74" fill="#c9d4de">bg</text><text x="10" y="89" fill="#4d5d6d">#0b0f13</text>
+<rect x="120" y="10" width="90" height="46" rx="6" fill="#1c2731" stroke="#3a4652"/>
+<text x="120" y="74" fill="#c9d4de">panel</text><text x="120" y="89" fill="#4d5d6d">#1c2731</text>
+<rect x="230" y="10" width="90" height="46" rx="6" fill="#c9d4de" stroke="#3a4652"/>
+<text x="230" y="74" fill="#c9d4de">text</text><text x="230" y="89" fill="#4d5d6d">#c9d4de</text>
+<rect x="340" y="10" width="90" height="46" rx="6" fill="#8fa6bd" stroke="#3a4652"/>
+<text x="340" y="74" fill="#c9d4de">steel</text><text x="340" y="89" fill="#4d5d6d">#8fa6bd</text>
+<rect x="450" y="10" width="90" height="46" rx="6" fill="#6fe3e8" stroke="#3a4652"/>
+<text x="450" y="74" fill="#c9d4de">cyan</text><text x="450" y="89" fill="#4d5d6d">#6fe3e8</text>
+<rect x="560" y="10" width="90" height="46" rx="6" fill="#6caaff" stroke="#3a4652"/>
+<text x="560" y="74" fill="#c9d4de">blue</text><text x="560" y="89" fill="#4d5d6d">#6caaff</text>
+<rect x="670" y="10" width="90" height="46" rx="6" fill="#b07cff" stroke="#3a4652"/>
+<text x="670" y="74" fill="#c9d4de">violet</text><text x="670" y="89" fill="#4d5d6d">#b07cff</text>
+<rect x="780" y="10" width="90" height="46" rx="6" fill="#4d5d6d" stroke="#3a4652"/>
+<text x="780" y="74" fill="#c9d4de">dim</text><text x="780" y="89" fill="#4d5d6d">#4d5d6d</text>
+</svg>

@@ -1,0 +1,6 @@
+#!/bin/sh
+# Short welcome line for tmux sessions and SSH logins.
+up=$(uptime -p | sed 's/^up //')
+load=$(cut -d' ' -f1 /proc/loadavg)
+printf '\n\033[1;38;2;111;227;232m  Welcome back, %s.\033[0m \033[38;2;108;170;255mSystems nominal.\033[0m\n' "$(id -un)"
+printf '\033[38;2;77;93;109m  %s  //  up %s  //  load %s\033[0m\n\n' "$(date '+%a %d %b %H:%M')" "$up" "$load"

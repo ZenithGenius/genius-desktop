@@ -1,0 +1,30 @@
+# Anonymous palette: colors change along each bar AND across the bars
+[general]
+framerate = 60
+bar_width = 2
+bar_spacing = 1
+
+[input]
+method = pulse
+
+[output]
+method = noncurses
+
+[color]
+background = default
+gradient = 1
+gradient_color_1 = '#1c3a5a'
+gradient_color_2 = '#2f6fb0'
+gradient_color_3 = '#6caaff'
+gradient_color_4 = '#6fe3e8'
+gradient_color_5 = '#c6f6ff'
+horizontal_gradient = 1
+horizontal_gradient_color_1 = '#6fe3e8'
+horizontal_gradient_color_2 = '#6caaff'
+horizontal_gradient_color_3 = '#8c8cff'
+horizontal_gradient_color_4 = '#b07cff'
+horizontal_gradient_color_5 = '#6fe3e8'
+blend_direction = 'up'
+
+[smoothing]
+noise_reduction = 77

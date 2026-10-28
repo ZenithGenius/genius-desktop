@@ -1,0 +1,116 @@
+#!/usr/bin/env python3
+"""Cold-palette terminal lock screens. lockscreen [matrix|pipes|starfield|radar|hex|clock], none = random. Any key exits."""
+import curses, math, os, random, sys, time
+
+def colors():
+    curses.start_color(); curses.use_default_colors()
+    # 1 dim steel, 2 blue, 3 cyan, 4 violet, 5 white
+    for i, c in enumerate((60, 69, 80, 141, 231), 1):
+        curses.init_pair(i, c if curses.COLORS >= 256 else curses.COLOR_CYAN, -1)
+
+def put(scr, y, x, s, attr=0):
+    h, w = scr.getmaxyx()
+    if 0 <= y < h and 0 <= x < w - 1:
+        try: scr.addstr(y, x, s[: max(0, w - 1 - x)], attr)
+        except curses.error: pass
+
+def radar(scr):
+    a, blips = 0.0, []
+    while True:
+        h, w = scr.getmaxyx(); cy, cx = h // 2, w // 2
+        r = min(h - 2, (w - 2) // 2)
+        scr.erase()
+        for ring in (r, r * 2 // 3, r // 3):                      # range rings
+            for t in range(0, 360, 4):
+                put(scr, cy + int(ring * math.sin(math.radians(t))), cx + int(2 * ring * math.cos(math.radians(t))), ".", curses.color_pair(1))
+        for k in range(r):                                          # sweep arm with fading tail
+            for tail, cp in ((0, 3), (0.12, 2), (0.24, 1)):
+                put(scr, cy + int(k * math.sin(a - tail)), cx + int(2 * k * math.cos(a - tail)), "*" if tail == 0 else ":", curses.color_pair(cp))
+        if random.random() < 0.06:
+            d, t = random.uniform(0.2, 0.95) * r, a
+            blips.append([cy + int(d * math.sin(t)), cx + int(2 * d * math.cos(t)), 1.0])
+        for b in blips:
+            put(scr, b[0], b[1], "@" if b[2] > 0.5 else "o", curses.color_pair(4 if b[2] > 0.5 else 2) | curses.A_BOLD)
+            b[2] -= 0.01
+        blips[:] = [b for b in blips if b[2] > 0]
+        put(scr, h - 1, 2, f"SWEEP {math.degrees(a) % 360:05.1f}  CONTACTS {len(blips):02d}", curses.color_pair(1))
+        scr.refresh(); a += 0.06
+        if scr.getch() != -1: return
+        time.sleep(0.04)
+
+def hexstream(scr):
+    msgs = ["ACCESS GRANTED", "HANDSHAKE OK", "UPLINK SECURE", "EXPECT US"]
+    flash, row = None, 0
+    while True:
+        h, w = scr.getmaxyx()
+        line_y = row % (h - 1)
+        addr = f"{random.randint(0, 0xFFFFFF):06x}  "
+        body = " ".join(f"{random.randint(0, 255):02x}" for _ in range(max(1, (w - 30) // 3)))
+        put(scr, line_y, 0, " " * (w - 1))
+        put(scr, line_y, 1, addr, curses.color_pair(1))
+        x = 1 + len(addr)
+        for byte in body.split():
+            hot = random.random() < 0.04
+            put(scr, line_y, x, byte, curses.color_pair(4 if hot else (3 if random.random() < 0.3 else 2)) | (curses.A_BOLD if hot else 0))
+            x += 3
+        put(scr, (line_y + 1) % (h - 1), 0, " " * (w - 1))
+        if flash is None and random.random() < 0.01:
+            flash = [random.choice(msgs), 25]
+        if flash:
+            m = f"[ {flash[0]} ]"
+            put(scr, h // 2, (w - len(m)) // 2, m, curses.color_pair(5) | curses.A_BOLD | curses.A_REVERSE)
+            flash[1] -= 1
+            if flash[1] <= 0: flash = None
+        scr.refresh(); row += 1
+        if scr.getch() != -1: return
+        time.sleep(0.05)
+
+DIGITS = {
+    "0": ["###", "# #", "# #", "# #", "###"], "1": ["  #", "  #", "  #", "  #", "  #"],
+    "2": ["###", "  #", "###", "#  ", "###"], "3": ["###", "  #", "###", "  #", "###"],
+    "4": ["# #", "# #", "###", "  #", "  #"], "5": ["###", "#  ", "###", "  #", "###"],
+    "6": ["###", "#  ", "###", "# #", "###"], "7": ["###", "  #", "  #", "  #", "  #"],
+    "8": ["###", "# #", "###", "# #", "###"], "9": ["###", "# #", "###", "  #", "###"],
+    ":": [" ", "#", " ", "#", " "],
+}
+
+def clock(scr):
+    while True:
+        h, w = scr.getmaxyx(); scr.erase()
+        now = time.localtime()
+        txt = time.strftime("%H:%M:%S", now)
+        cells = [DIGITS[c] for c in txt]
+        width = sum(len(c[0]) * 2 + 2 for c in cells)
+        x0, y0 = (w - width) // 2, h // 2 - 4
+        x = x0
+        for i, c in enumerate(cells):
+            cp = 3 if i < 2 else (2 if i < 5 else 4)
+            for r, line in enumerate(c):
+                for k, ch in enumerate(line):
+                    if ch == "#": put(scr, y0 + r, x + 2 * k, "  ", curses.color_pair(cp) | curses.A_REVERSE)
+            x += len(c[0]) * 2 + 2
+        date = time.strftime("%A %d %B %Y", now).upper()
+        put(scr, y0 + 7, (w - len(date)) // 2, date, curses.color_pair(1))
+        put(scr, y0 + 9, (w - 10) // 2, "Expect us.", curses.color_pair(4) | curses.A_BOLD)
+        scr.refresh()
+        if scr.getch() != -1: return
+        time.sleep(0.2)
+
+def main(scr, mode):
+    curses.curs_set(0); scr.nodelay(True); colors()
+    {"radar": radar, "hex": hexstream, "clock": clock}[mode](scr)
+
+EXTERNAL = {  # packaged programs, started with the same cold colors
+    "matrix": ["cmatrix", "-s", "-b", "-C", "blue", "-u", "6"],
+    "pipes": ["/usr/games/pipes", "-p", "4", "-t", "1", "-c", "4", "-c", "6", "-c", "5", "-f", "60", "-r", "3000", "-R"],
+    "starfield": [os.path.expanduser("~/.local/bin/starfield")],
+}
+ALL = ["matrix", "pipes", "starfield", "radar", "hex", "clock"]
+
+if __name__ == "__main__":
+    mode = (sys.argv[1] if len(sys.argv) > 1 else random.choice(ALL)).lower()
+    if mode not in ALL:
+        sys.exit(f"unknown lock screen '{mode}'. Choose one of: {', '.join(ALL)} (or none for random)")
+    if mode in EXTERNAL:
+        os.execvp(EXTERNAL[mode][0], EXTERNAL[mode])
+    curses.wrapper(main, mode)

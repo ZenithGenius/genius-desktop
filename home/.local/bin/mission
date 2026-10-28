@@ -1,0 +1,58 @@
+#!/bin/sh
+# mission [name] [folder]: tmux workspace with a main shell, btop and a notes pane.
+#   mission            pick a mission (running ones first, then saved ones in ~/notes)
+#   mission name       resume it: reattach if running, else rebuild in its saved folder
+#   mission name dir   start it in a given folder (a running mission keeps its panes; the folder applies next rebuild)
+# The folder is stored in the mission's notes file, so missions survive reboots.
+N="$HOME/notes"
+
+if [ -z "$1" ]; then
+  running=$(tmux ls -F '#{session_name}' 2>/dev/null | sed -n 's/^mission-//p')
+  saved=$(ls "$N"/*.md 2>/dev/null | xargs -r -n1 basename | sed 's/\.md$//')
+  pick=$( { for m in $running; do echo "$m  (running)"; done
+            for m in $saved; do echo "$running" | grep -qx "$m" || echo "$m"; done; } \
+          | fzf --prompt='mission > ' --height=40% --reverse | awk '{print $1}')
+  [ -n "$pick" ] || exit 0
+  exec "$0" "$pick"
+fi
+
+name=$1
+session="mission-$name"
+notes="$N/$name.md"
+
+if tmux has-session -t "$session" 2>/dev/null; then
+  # never rebuild a running mission; a new folder is saved for the next rebuild
+  [ -n "$2" ] && [ -f "$notes" ] && sed -i "s|^Folder: \`.*\`\$|Folder: \`$(realpath "$2")\`|" "$notes"
+  [ -n "$TMUX" ] && exec tmux switch-client -t "$session"
+  exec tmux attach -t "$session"
+fi
+
+if [ -n "$2" ]; then
+  dir=$(realpath "$2")
+elif [ -f "$notes" ]; then
+  dir=$(sed -n 's/^Folder: `\(.*\)`$/\1/p' "$notes" | head -1)
+fi
+if [ ! -d "$dir" ]; then
+  # prefer a known folder whose name ends with the mission name, then any zoxide match
+  dir=$(zoxide query -l "$name" 2>/dev/null | grep -iE "/[^/]*$name\$" | head -1)
+  [ -n "$dir" ] || dir=$(zoxide query "$name" 2>/dev/null)
+  [ -d "$dir" ] || dir=$HOME
+fi
+
+mkdir -p "$N"
+if [ -f "$notes" ]; then
+  sed -i "s|^Folder: \`.*\`\$|Folder: \`$dir\`|" "$notes"
+else
+  printf '# Mission: %s\n\nFolder: `%s`\n\n## Goals\n\n- \n\n## Notes\n\n' "$name" "$dir" > "$notes"
+fi
+
+tmux new-session -d -s "$session" -n "$name" -c "$dir"
+tmux split-window -h -l 40% -t "$session:1" -c "$dir" "btop"
+# notes get their own window so btop keeps the full height it needs (24 rows)
+tmux new-window -d -t "$session:2" -n notes -c "$N" \
+  "glow -w 80 '$notes'; printf '\n\033[38;2;77;93;109m  notes: %s  (edit: nano %s)\033[0m\n\n' '$notes' '$notes'; exec zsh"
+tmux select-window -t "$session:1"
+tmux select-pane -t "$session:1.1"
+
+[ -n "$TMUX" ] && exec tmux switch-client -t "$session"
+exec tmux attach -t "$session"

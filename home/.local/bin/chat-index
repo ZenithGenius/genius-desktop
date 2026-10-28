@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+"""List Cursor agent and Claude Code chats from every folder, newest first.
+
+Output (tab separated): epoch, tool, cwd, chat id, display line. Used by the `resume` zsh function.
+"""
+import glob, json, os, sys, time
+
+HOME = os.path.expanduser("~")
+rows = []
+
+# Cursor agent: ~/.cursor/chats/<md5(cwd)>/<chat id>/meta.json
+for meta in glob.glob(f"{HOME}/.cursor/chats/*/*/meta.json"):
+    try:
+        m = json.load(open(meta))
+    except (OSError, ValueError):
+        continue
+    if not m.get("hasConversation", True) or not m.get("cwd"):
+        continue
+    t = (m.get("updatedAtMs") or m.get("createdAtMs") or 0) / 1000
+    rows.append((t, "agent", m["cwd"], os.path.basename(os.path.dirname(meta)), m.get("title") or "(untitled)"))
+
+# Claude Code: ~/.claude/projects/<encoded cwd>/<session id>.jsonl
+for f in glob.glob(f"{HOME}/.claude/projects/*/*.jsonl"):
+    cwd, title, summary = None, None, None
+    try:
+        with open(f, errors="replace") as fh:
+            for i, line in enumerate(fh):
+                if i > 400:
+                    break
+                try:
+                    e = json.loads(line)
+                except ValueError:
+                    continue
+                cwd = cwd or e.get("cwd")
+                if e.get("type") == "summary" and e.get("summary"):
+                    summary = e["summary"]
+                if title is None and e.get("type") == "user" and not e.get("isMeta"):
+                    c = e.get("message", {}).get("content")
+                    if isinstance(c, list):
+                        c = " ".join(x.get("text", "") for x in c if isinstance(x, dict) and x.get("type") == "text")
+                    if isinstance(c, str) and c.strip() and not c.lstrip().startswith("<"):
+                        title = " ".join(c.split())
+    except OSError:
+        continue
+    if not cwd:
+        continue
+    rows.append((os.path.getmtime(f), "claude", cwd, os.path.basename(f)[:-6], summary or title or "(untitled)"))
+
+rows.sort(reverse=True)
+for t, tool, cwd, cid, title in rows:
+    short = cwd.replace(HOME, "~")
+    when = time.strftime("%Y-%m-%d %H:%M", time.localtime(t))
+    gone = "" if os.path.isdir(cwd) else "  [folder gone]"
+    line = f"{when}  {tool:<6}  {short[:38]:<38}  {title[:70]}{gone}"
+    sys.stdout.write(f"{t:.0f}\t{tool}\t{cwd}\t{cid}\t{line}\n")

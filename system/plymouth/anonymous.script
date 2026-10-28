@@ -1,0 +1,107 @@
+// Anonymous boot splash: intro plays once, then a seamless loop; Cross HUD (adi1090x, GPL-3.0) scans on the right.
+// Frames are 1280x720 and scaled to the screen; only the current frame is decoded, so memory stays low.
+
+screen.w = Window.GetWidth(0);
+screen.h = Window.GetHeight(0);
+sx = screen.w / 1280;
+sy = screen.h / 720;
+
+INTRO = 100;
+LOOP = 46;
+HUD = 105;
+
+Window.SetBackgroundTopColor(0.01, 0.012, 0.016);
+Window.SetBackgroundBottomColor(0.01, 0.012, 0.016);
+
+bg.sprite = Sprite();
+bg.sprite.SetZ(0);
+bg.shown = -1;
+
+hud.sprite = Sprite();
+hud.sprite.SetZ(10);
+hud.sprite.SetOpacity(0);
+hud.shown = -1;
+
+ticks = 0;
+
+fun frame_name(n) {
+    if (n < INTRO)
+        return "intro-" + n + ".png";
+    return "loop-" + ((n - INTRO) % LOOP) + ".png";
+}
+
+fun refresh_callback() {
+    // Footage at 12 fps on Plymouth's 50 Hz refresh.
+    n = Math.Int(ticks * 12 / 50);
+    if (n != bg.shown) {
+        bg.sprite.SetImage(Image(frame_name(n)).Scale(screen.w, screen.h));
+        bg.shown = n;
+    }
+
+    // HUD at 25 fps, fades in once the manifesto starts typing (~2 s).
+    h = Math.Int(ticks / 2) % HUD;
+    if (h != hud.shown) {
+        img = Image("hud-" + h + ".png");
+        img = img.Scale(img.GetWidth() * sx, img.GetHeight() * sy);
+        hud.sprite.SetImage(img);
+        hud.sprite.SetPosition(1010 * sx - img.GetWidth() / 2, 330 * sy - img.GetHeight() / 2, 10);
+        hud.shown = h;
+    }
+    if (ticks > 100 && ticks < 150)
+        hud.sprite.SetOpacity((ticks - 100) / 50);
+    else if (ticks >= 150)
+        hud.sprite.SetOpacity(1);
+
+    ticks++;
+}
+Plymouth.SetRefreshFunction(refresh_callback);
+
+//------------------------------- Passphrase prompt ---------------------------
+prompt = null;
+bullets = null;
+bullet.image = Image.Text("*", 0.78, 0.84, 0.9);
+
+fun DisplayPasswordCallback(text, count) {
+    label = "PASSPHRASE REQUIRED";
+    if (text != "")
+        label = text;
+    prompt.image = Image.Text(label, 0.56, 0.65, 0.74);
+    prompt.sprite = Sprite(prompt.image);
+    prompt.sprite.SetPosition(screen.w / 2 - prompt.image.GetWidth() / 2, screen.h * 0.80, 100);
+
+    bullets = null;
+    total = count * bullet.image.GetWidth();
+    for (i = 0; i < count; i++) {
+        bullets[i].sprite = Sprite(bullet.image);
+        bullets[i].sprite.SetPosition(screen.w / 2 - total / 2 + i * bullet.image.GetWidth(), screen.h * 0.80 + prompt.image.GetHeight() * 2, 100);
+    }
+}
+Plymouth.SetDisplayPasswordFunction(DisplayPasswordCallback);
+
+question = null;
+answer = null;
+fun DisplayQuestionCallback(text, entry) {
+    question.image = Image.Text(text, 0.56, 0.65, 0.74);
+    question.sprite = Sprite(question.image);
+    question.sprite.SetPosition(screen.w / 2 - question.image.GetWidth() / 2, screen.h * 0.80, 100);
+    answer.image = Image.Text(entry, 0.78, 0.84, 0.9);
+    answer.sprite = Sprite(answer.image);
+    answer.sprite.SetPosition(screen.w / 2 - answer.image.GetWidth() / 2, screen.h * 0.80 + question.image.GetHeight() * 2, 100);
+}
+Plymouth.SetDisplayQuestionFunction(DisplayQuestionCallback);
+
+fun DisplayNormalCallback() {
+    prompt = null;
+    bullets = null;
+    question = null;
+    answer = null;
+}
+Plymouth.SetDisplayNormalFunction(DisplayNormalCallback);
+
+message = null;
+fun MessageCallback(text) {
+    message.image = Image.Text(text, 0.56, 0.65, 0.74);
+    message.sprite = Sprite(message.image);
+    message.sprite.SetPosition(screen.w / 2 - message.image.GetWidth() / 2, screen.h * 0.07, 100);
+}
+Plymouth.SetMessageFunction(MessageCallback);

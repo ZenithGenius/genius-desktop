@@ -1,0 +1,67 @@
+# Ghostty: Anonymous steel theme
+# Cold palette, system monospace font
+
+command = zsh
+working-directory = inherit
+# New tabs/windows open in the current folder (like GNOME Terminal). Nautilus still wins:
+# each launch is its own process, so its --working-directory sets the first window.
+window-inherit-working-directory = true
+# false = each launch is a real window (Burn-My-Windows open effect).
+# Snap duplicate desktop is masked so this does not open two windows.
+gtk-single-instance = false
+
+shell-integration = zsh
+# ssh-env: fall back to TERM=xterm-256color over SSH (servers lack xterm-ghostty).
+# ssh-terminfo deliberately off: it would write terminfo files onto remote hosts.
+shell-integration-features = cursor,sudo,title,path,ssh-env,no-ssh-terminfo
+# Don't inherit GNOME Terminal D-Bus IDs when launched from the desktop.
+env = GNOME_TERMINAL_SERVICE=
+env = GNOME_TERMINAL_SCREEN=
+
+# --- look  ---
+# font-family = Ubuntu Sans Mono  (unset = system monospace)
+font-size = 12
+font-thicken = true
+bold-is-bright = true
+cursor-style = bar
+cursor-style-blink = false
+window-padding-x = 10
+window-padding-y = 8
+window-padding-balance = true
+background-opacity = 1
+minimum-contrast = 1.1
+
+background = #0b0f13
+foreground = #c9d4de
+cursor-color = #8fa6bd
+cursor-text = #0b0f13
+selection-background = #3a4652
+selection-foreground = #e6edf3
+
+palette = 0=#0b0f13
+palette = 1=#b05f6d
+palette = 2=#6f9f8f
+palette = 3=#a9a483
+palette = 4=#6c8fb3
+palette = 5=#8b7fb3
+palette = 6=#6fb3b8
+palette = 7=#c9d4de
+palette = 8=#3a4652
+palette = 9=#c77a87
+palette = 10=#86b8a6
+palette = 11=#c4bf9a
+palette = 12=#8fa6bd
+palette = 13=#a79bd0
+palette = 14=#8fd0d4
+palette = 15=#e6edf3
+
+# --- keybinds  ---
+keybind = shift+arrow_left=previous_tab
+keybind = shift+arrow_right=next_tab
+keybind = f11=toggle_fullscreen
+keybind = ctrl+shift+g=navigate_search:next
+keybind = ctrl+shift+h=navigate_search:previous
+keybind = ctrl+shift+page_up=move_tab:-1
+keybind = ctrl+shift+page_down=move_tab:1
+keybind = alt+9=goto_tab:9
+keybind = alt+0=goto_tab:10

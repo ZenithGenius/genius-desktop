@@ -1,0 +1,3 @@
+#!/bin/sh
+# Random tmux lock screen (one of 6, see lockscreen). Any key returns.
+exec "$HOME/.local/bin/lockscreen"

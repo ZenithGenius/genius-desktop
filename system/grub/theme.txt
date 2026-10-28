@@ -1,0 +1,45 @@
+# Anonymous GRUB theme (matches the Plymouth splash)
+title-text: ""
+desktop-image: "background.png"
+desktop-color: "#020304"
+terminal-font: "Noto Sans Mono Regular 16"
+
++ boot_menu {
+  left = 6%
+  top = 22%
+  width = 40%
+  height = 50%
+  item_font = "Noto Sans Mono Regular 22"
+  item_color = "#6f8193"
+  selected_item_font = "Noto Sans Mono Regular 22"
+  selected_item_color = "#e6edf3"
+  selected_item_pixmap_style = "select_*.png"
+  item_height = 44
+  item_padding = 14
+  item_spacing = 6
+  icon_width = 0
+  icon_height = 0
+  item_icon_space = 0
+  scrollbar = false
+}
+
++ label {
+  left = 6%
+  top = 76%
+  width = 40%
+  align = "left"
+  id = "__timeout__"
+  text = "auto-boot in %d s"
+  color = "#4d5d6d"
+  font = "Noto Sans Mono Regular 16"
+}
+
++ label {
+  left = 6%
+  top = 80%
+  width = 60%
+  align = "left"
+  text = "[enter] boot   [e] edit   [c] shell"
+  color = "#4d5d6d"
+  font = "Noto Sans Mono Regular 16"
+}

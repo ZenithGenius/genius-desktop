@@ -1,0 +1,8 @@
+[Sound Theme]
+Name=Anonymous
+Comment=Short, quiet, cold digital blips
+Inherits=Yaru
+Directories=stereo
+
+[stereo]
+OutputProfile=stereo
