@@ -170,9 +170,9 @@ if ((BOOT)); then
   run sudo mkdir -p /boot/grub/themes
   run sudo cp -r "$REPO/system/grub" /boot/grub/themes/anonymous
   run sudo cp /etc/default/grub "/etc/default/grub.bak-genius-$STAMP"
-  # grub.d is read after /etc/default/grub, and Kali sets its own theme there; 99- comes last
+  # grub.d is read after /etc/default/grub, and Kali sets its own theme in kali-themes.cfg; zz- sorts after every name
   run sudo mkdir -p /etc/default/grub.d
-  ((DRY)) || echo 'GRUB_THEME="/boot/grub/themes/anonymous/theme.txt"' | sudo tee /etc/default/grub.d/99-genius.cfg >/dev/null
+  ((DRY)) || echo 'GRUB_THEME="/boot/grub/themes/anonymous/theme.txt"' | sudo tee /etc/default/grub.d/zz-genius.cfg >/dev/null
   grep -q 'GRUB_CMDLINE_LINUX_DEFAULT=.*splash' /etc/default/grub || run sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT="/&splash /' /etc/default/grub
   run sudo update-grub
 

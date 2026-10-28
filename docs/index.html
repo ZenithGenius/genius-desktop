@@ -178,7 +178,7 @@ lockscreen radar        <span class="c"># preview a lock screen: matrix pipes st
 <h2 id="undo"><span>07</span> Undo and troubleshooting</h2>
 <details><summary>Remove the terminal layer</summary><p>Delete the genius-desktop line at the end of ~/.zshrc, then restore any replaced file from its .bak-genius-DATE copy.</p></details>
 <details><summary>Remove the desktop layer</summary><p>Switch icons, cursor and sounds back in Settings and turn the extensions off in the Extensions app.</p></details>
-<details><summary>Remove the boot layer</summary><p>Delete /etc/default/grub.d/99-genius.cfg, restore /etc/default/grub from its backup and run sudo update-grub, then sudo plymouth-set-default-theme -R bgrt. For the login screen, run sudo ./uninstall.sh from a clone of gse-gdm-extension.</p></details>
+<details><summary>Remove the boot layer</summary><p>Delete /etc/default/grub.d/zz-genius.cfg, restore /etc/default/grub from its backup and run sudo update-grub, then sudo plymouth-set-default-theme -R bgrt. For the login screen, run sudo ./uninstall.sh from a clone of gse-gdm-extension.</p></details>
 <details><summary>The prompt did not change</summary><p>Open a new terminal or run exec zsh. The login shell switch to zsh applies at the next login.</p></details>
 <details><summary>Extensions are installed but not running</summary><p>GNOME loads new extensions at login. Log out and back in, then check with gnome-extensions list --enabled.</p></details>
 <details><summary>Installing over SSH</summary><p>Supported. The installer borrows the logged-in session bus for GNOME settings, or starts a private one.</p></details>

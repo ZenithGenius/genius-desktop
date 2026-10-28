@@ -163,7 +163,7 @@ Edit the copy in the repo instead and run `./install.sh` again to redeploy.
 
 - **Terminal**: delete the `genius-desktop` line at the end of `~/.zshrc`. Restore any replaced file from its `.bak-genius-DATE` copy.
 - **Desktop**: switch icons, cursor and sounds back in Settings, and turn extensions off in the Extensions app.
-- **Boot**: delete `/etc/default/grub.d/99-genius.cfg`, restore `/etc/default/grub` from its backup, run `sudo update-grub`, then `sudo plymouth-set-default-theme -R bgrt` (or your previous theme). For the login screen, run `sudo ./uninstall.sh` from a clone of gse-gdm-extension.
+- **Boot**: delete `/etc/default/grub.d/zz-genius.cfg`, restore `/etc/default/grub` from its backup, run `sudo update-grub`, then `sudo plymouth-set-default-theme -R bgrt` (or your previous theme). For the login screen, run `sudo ./uninstall.sh` from a clone of gse-gdm-extension.
 
 ## Troubleshooting
 
@@ -186,6 +186,12 @@ The installer skips anything your release does not ship and keeps going. starshi
 </details>
 
 <details>
+<summary>The login screen keeps the distribution's wallpaper (Kali)</summary>
+
+The login wallpaper relies on gse-gdm-extension. It works on Ubuntu. On Kali 2026 the greeter runs as its own `gdm-greeter` user and does not load the extension, even though the settings are in place. The rest of `--boot` (splash and GRUB) works there. Kali users can set the login background through Kali's own theme packages instead.
+</details>
+
+<details>
 <summary>Running the installer over SSH</summary>
 
 It works. GNOME settings need a session bus, so the installer borrows the logged-in user's bus when one exists, or starts a private one for the run.
@@ -196,7 +202,7 @@ It works. GNOME settings need a session bus, so the installer borrows the logged
 | System | Terminal | Desktop | Boot |
 |---|---|---|---|
 | Ubuntu 26.04, GNOME 50 | ✓ | ✓ | ✓ |
-| Kali 2026.3, GNOME 50 | ✓ | ✓ | pending |
+| Kali 2026.3, GNOME 50 | ✓ | ✓ | splash and GRUB ✓, login wallpaper ✗ (see below) |
 
 ## Credits
 
