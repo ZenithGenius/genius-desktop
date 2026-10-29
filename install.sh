@@ -57,7 +57,12 @@ deploy() {
 
 # ---------------------------------------------------------------- terminal
 say "Terminal layer: packages"
-run sudo apt-get update -qq
+run sudo apt-get update -qq || {
+  warn "apt-get update failed. On Kali this is usually the archive key change; fix it with:"
+  warn "  sudo wget https://archive.kali.org/archive-keyring.gpg -O /usr/share/keyrings/kali-archive-keyring.gpg"
+  warn "then run ./install.sh again."
+  exit 1
+}
 apt_install zsh tmux git curl unzip python3 fzf bat eza zoxide fastfetch figlet glow btop cava cmatrix \
   pipes-sh yazi lazygit starship tealdeer asciinema ffmpeg xclip libnotify-bin \
   zsh-autosuggestions zsh-syntax-highlighting ghostty

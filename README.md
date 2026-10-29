@@ -207,6 +207,17 @@ The login wallpaper relies on gse-gdm-extension. It works on Ubuntu. On Kali 202
 </details>
 
 <details>
+<summary>Kali: "the repository is not signed" (NO_PUBKEY)</summary>
+
+Kali changed its archive signing key, and systems with the old keyring refuse to update. That is a Kali issue, not one from this repo. Install the new keyring (see [Kali's announcement](https://www.kali.org/blog/new-kali-archive-signing-key/)), then run the installer again:
+
+```bash
+sudo wget https://archive.kali.org/archive-keyring.gpg -O /usr/share/keyrings/kali-archive-keyring.gpg
+sudo apt update
+```
+</details>
+
+<details>
 <summary>Running the installer over SSH</summary>
 
 It works. GNOME settings need a session bus, so the installer borrows the logged-in user's bus when one exists, or starts a private one for the run.
