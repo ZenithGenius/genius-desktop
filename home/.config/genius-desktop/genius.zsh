@@ -19,7 +19,8 @@ command -v starship >/dev/null && eval "$(starship init zsh)"
 autoload -Uz add-zsh-hook
 # starship top line printed as output, so a resize can only redraw "└─❯" (see ~/.config/starship.toml)
 if command -v starship >/dev/null; then
-  _genius_top() { print -rP -- "$(starship prompt --profile top --terminal-width="$COLUMNS" --status="${STARSHIP_CMD_STATUS:-0}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="${STARSHIP_JOBS_COUNT:-0}")"; }
+  # plain ANSI printed verbatim: no prompt expansion, so $(...) in a folder or branch name stays text
+  _genius_top() { print -r -- "$(STARSHIP_SHELL= starship prompt --profile top --terminal-width="$COLUMNS" --status="${STARSHIP_CMD_STATUS:-0}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="${STARSHIP_JOBS_COUNT:-0}")"; }
   _genius_precmd_top() { (( ${+_genius_seen} )) && print; _genius_seen=1; _genius_top; }
   add-zsh-hook precmd _genius_precmd_top
   _genius_cls() { print -n '\e[H\e[2J'; _genius_top; zle .reset-prompt; }
