@@ -2,6 +2,7 @@
 
 ## 2026-10-30
 
+- Real cause of the missing prompt top line on Ghostty 1.4.0: it fails to load a fallback font for U+327F (㉿) and drops the whole row (log: FontconfigNoMatch). Fixed with `font-codepoint-map = U+327F=Noto Sans CJK KR` in the Ghostty config; installer adds fonts-noto-cjk.
 - Prompt top line no longer lost on window resize or Ctrl+L: starship split into `profiles.top` (printed by a zsh precmd as plain output) and a one-line prompt `└─❯`. Verified in a pty with a SIGWINCH resize.
 - Ghostty opens at 110x32 so fastfetch is not truncated (was 88 columns).
 

@@ -21,6 +21,8 @@ env = GNOME_TERMINAL_SCREEN=
 # --- look  ---
 # font-family = Ubuntu Sans Mono  (unset = system monospace)
 font-size = 12
+# Ghostty 1.4 fails to load a fallback font for "㉿" (prompt) and then drops the whole row; name one
+font-codepoint-map = U+327F=Noto Sans CJK KR
 font-thicken = true
 bold-is-bright = true
 cursor-style = bar

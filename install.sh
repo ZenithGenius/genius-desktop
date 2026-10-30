@@ -65,7 +65,7 @@ run sudo apt-get update -qq || {
 }
 apt_install zsh tmux git curl unzip python3 fzf bat eza zoxide fastfetch figlet glow btop cava cmatrix \
   pipes-sh yazi lazygit starship tealdeer asciinema ffmpeg xclip libnotify-bin \
-  zsh-autosuggestions zsh-syntax-highlighting ghostty
+  zsh-autosuggestions zsh-syntax-highlighting ghostty fonts-noto-cjk
 if [[ $MISSING == *" starship "* ]] && ! command -v starship >/dev/null; then
   say "starship is not packaged here: installing the official release into ~/.local/bin"
   run mkdir -p "$HOME/.local/bin"
