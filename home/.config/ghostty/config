@@ -28,6 +28,9 @@ cursor-style-blink = false
 window-padding-x = 10
 window-padding-y = 8
 window-padding-balance = true
+# open wide enough for the fastfetch block (about 100 columns) so nothing is cut
+window-width = 110
+window-height = 32
 background-opacity = 1
 minimum-contrast = 1.1
 

@@ -1,8 +1,11 @@
 # Anonymous steel prompt, Kali-style frame
-add_newline = true
-format = """
-[┌──\\(](#5a6e96)$username[㉿](#8c8cff)$hostname[\\)-\\[](#5a6e96)$directory[\\]](#5a6e96)$git_branch$git_status$python$nodejs$java$docker_context$cmd_duration${custom.vpn}$time
-[└─](#5a6e96)$character"""
+# Two-line Kali frame, split so a window resize never eats the top line:
+# the shell prints profiles.top as plain output, zsh only redraws the "└─❯" line.
+add_newline = false
+format = "[└─](#5a6e96)$character"
+
+[profiles]
+top = """[┌──\\(](#5a6e96)$username[㉿](#8c8cff)$hostname[\\)-\\[](#5a6e96)$directory[\\]](#5a6e96)$git_branch$git_status$python$nodejs$java$docker_context$cmd_duration${custom.vpn}$time"""
 
 [username]
 show_always = true

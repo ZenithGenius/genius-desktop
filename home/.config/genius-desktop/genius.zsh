@@ -16,6 +16,15 @@ fi
 
 # starship prompt (~/.config/starship.toml)
 command -v starship >/dev/null && eval "$(starship init zsh)"
+autoload -Uz add-zsh-hook
+# starship top line printed as output, so a resize can only redraw "└─❯" (see ~/.config/starship.toml)
+if command -v starship >/dev/null; then
+  _genius_top() { print -rP -- "$(starship prompt --profile top --terminal-width="$COLUMNS" --status="${STARSHIP_CMD_STATUS:-0}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="${STARSHIP_JOBS_COUNT:-0}")"; }
+  _genius_precmd_top() { (( ${+_genius_seen} )) && print; _genius_seen=1; _genius_top; }
+  add-zsh-hook precmd _genius_precmd_top
+  _genius_cls() { print -n '\e[H\e[2J'; _genius_top; zle .reset-prompt; }
+  zle -N clear-screen _genius_cls
+fi
 
 # Ghostty shell integration (cwd, title, prompt marks), no-op outside Ghostty
 if [[ -n ${GHOSTTY_RESOURCES_DIR:-} ]]; then
